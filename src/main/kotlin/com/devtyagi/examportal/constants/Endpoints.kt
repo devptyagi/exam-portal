@@ -12,6 +12,10 @@ class Endpoints {
             const val LOGIN = "${ADMIN_BASE_URL}/login"
 
             const val ADD_TEACHER = "${ADMIN_BASE_URL}/add-teacher"
+
+            const val ADD_SUBJECT = "${ADMIN_BASE_URL}/add-subject"
+
+            const val GET_ALL_SUBJECTS = "${ADMIN_BASE_URL}/get-subjects"
         }
     }
 
