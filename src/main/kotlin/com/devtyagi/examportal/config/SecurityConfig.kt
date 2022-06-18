@@ -37,6 +37,7 @@ class SecurityConfig(
         http?.authorizeRequests()
             ?.antMatchers(Endpoints.BASE_URL + "/**/login")?.permitAll()
             ?.antMatchers(Endpoints.BASE_URL + "/admin/**")?.hasRole(Role.ADMIN.toString())
+            ?.antMatchers(Endpoints.BASE_URL + "/teacher/**")?.hasRole(Role.TEACHER.toString())
 
         http?.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
         http?.addFilterBefore(filterChainExceptionHandler, LogoutFilter::class.java)

@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-data class AddTeacherResponseDTO(
+data class LoginTeacherResponseDTO(
     val name: String,
     val email: String,
     val gender: String,
     val phoneNumber: String,
-    val subjects: List<Subject>
+    val accessToken: String
 )
