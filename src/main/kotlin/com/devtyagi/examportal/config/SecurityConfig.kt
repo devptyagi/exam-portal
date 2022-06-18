@@ -3,6 +3,7 @@ package com.devtyagi.examportal.config
 import com.devtyagi.examportal.auth.FilterChainExceptionHandler
 import com.devtyagi.examportal.auth.JwtRequestFilter
 import com.devtyagi.examportal.auth.JwtUserDetailsService
+import com.devtyagi.examportal.constants.Endpoints
 import com.devtyagi.examportal.enums.Role
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -34,8 +35,8 @@ class SecurityConfig(
         http?.csrf()?.disable()
         http?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         http?.authorizeRequests()
-            ?.antMatchers("**/signup/**")?.permitAll()
-            ?.antMatchers("**/admin/**")?.hasRole(Role.ADMIN.toString())
+            ?.antMatchers(Endpoints.BASE_URL + "/**/login")?.permitAll()
+            ?.antMatchers(Endpoints.BASE_URL + "/admin/**")?.hasRole(Role.ADMIN.toString())
 
         http?.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
         http?.addFilterBefore(filterChainExceptionHandler, LogoutFilter::class.java)

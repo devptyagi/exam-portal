@@ -32,16 +32,16 @@ class JwtUtil(
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).body
     }
 
-    private fun isTokenExpired(token: String?): Boolean? {
+    private fun isTokenExpired(token: String?): Boolean {
         return extractExpiration(token).before(Date())
     }
 
-    fun generateToken(userDetails: UserDetails): String? {
+    fun generateToken(userDetails: UserDetails): String {
         val claims: Map<String, Any> = HashMap()
         return createToken(claims, userDetails.username)
     }
 
-    private fun createToken(claims: Map<String, Any>, subject: String): String? {
+    private fun createToken(claims: Map<String, Any>, subject: String): String {
         return Jwts.builder()
             .setClaims(claims)
             .setSubject(subject)
@@ -53,7 +53,7 @@ class JwtUtil(
 
     fun validateToken(token: String?, userDetails: UserDetails): Boolean? {
         val username = extractUsername(token)
-        return username == userDetails.username && !isTokenExpired(token)!!
+        return username == userDetails.username && !isTokenExpired(token)
     }
 
 }

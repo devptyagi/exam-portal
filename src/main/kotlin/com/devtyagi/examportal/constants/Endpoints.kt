@@ -9,6 +9,8 @@ class Endpoints {
         companion object {
             private const val ADMIN_BASE_URL = "/admin"
 
+            const val LOGIN = "${ADMIN_BASE_URL}/login"
+
             const val ADD_TEACHER = "${ADMIN_BASE_URL}/add-teacher"
         }
     }
