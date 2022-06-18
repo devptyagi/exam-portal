@@ -141,6 +141,7 @@ class TeacherService(
             userDetails.getUser().name,
             userDetails.getUser().email,
             userDetails.getUser().gender.toString(),
+            Role.TEACHER,
             userDetails.getUser().phoneNumber,
             accessToken
         )

@@ -90,6 +90,7 @@ class StudentService(
             userDetails.getUser().name,
             userDetails.getUser().email,
             userDetails.getUser().gender.toString(),
+            Role.STUDENT,
             userDetails.getUser().phoneNumber,
             accessToken
         )

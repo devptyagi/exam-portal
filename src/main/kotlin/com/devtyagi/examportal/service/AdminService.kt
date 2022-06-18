@@ -42,7 +42,7 @@ class AdminService(
         }
         val userDetails = userDetailsService.loadUserByUsername(loginRequestDTO.email)
         val accessToken = jwtUtil.generateToken(userDetails)
-        return LoginAdminResponseDTO(accessToken)
+        return LoginAdminResponseDTO(Role.ADMIN ,accessToken)
     }
 
     fun doesAdminExist() = userRepository.findUserByEmail(adminEmail) != null
