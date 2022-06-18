@@ -148,4 +148,12 @@ class TeacherService(
         )
     }
 
+    fun getTeacherById(userId: String): Teacher {
+        return teacherRepository.findById(userId).orElse(null) ?: throw TeacherNotFoundException()
+    }
+
+    fun getAllExamsByTeacher(user: User): List<Exam> {
+        return examRepository.findAllByCreatedBy_User(user)
+    }
+
 }

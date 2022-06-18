@@ -32,6 +32,8 @@ class Endpoints {
             const val ADD_QUESTION = "${TEACHER_BASE_URL}/add-question"
 
             const val CREATE_EXAM = "${TEACHER_BASE_URL}/add-exam"
+
+            const val GET_ALL_EXAMS = "${TEACHER_BASE_URL}/all-exams"
         }
     }
 }

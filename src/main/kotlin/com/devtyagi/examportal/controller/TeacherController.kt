@@ -1,6 +1,8 @@
 package com.devtyagi.examportal.controller
 
+import com.devtyagi.examportal.auth.CustomUserDetails
 import com.devtyagi.examportal.constants.Endpoints
+import com.devtyagi.examportal.dao.Exam
 import com.devtyagi.examportal.dto.request.AddExamRequestDTO
 import com.devtyagi.examportal.dto.request.AddQuestionRequestDTO
 import com.devtyagi.examportal.dto.request.LoginRequestDTO
@@ -12,6 +14,7 @@ import io.jsonwebtoken.Jwts.header
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.util.StringUtils
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -30,11 +33,17 @@ class TeacherController(
     private val teacherService: TeacherService
 ) {
 
+    @GetMapping(Endpoints.TeacherAPI.GET_ALL_EXAMS)
+    fun getAllExamsByTeacher(): List<Exam> {
+        val user = SecurityContextHolder.getContext().authentication.principal as CustomUserDetails
+        return teacherService.getAllExamsByTeacher(user.getUser())
+    }
+
     @PostMapping(Endpoints.TeacherAPI.LOGIN)
     fun loginTeacher(@RequestBody loginRequestDTO: LoginRequestDTO): LoginTeacherResponseDTO {
         return teacherService.loginTeacher(loginRequestDTO)
     }
-    
+
     @PostMapping(Endpoints.TeacherAPI.CREATE_EXAM)
     fun createExam(@RequestBody addExamRequestDTO: AddExamRequestDTO): AddExamResponseDTO {
         return teacherService.createExam(addExamRequestDTO)
