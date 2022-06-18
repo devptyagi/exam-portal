@@ -39,6 +39,8 @@ dependencies {
     implementation("org.glassfish.jaxb:jaxb-runtime:2.3.6")
 
     implementation("io.jsonwebtoken:jjwt:0.2")
+    implementation("org.apache.commons:commons-lang3:3.0")
+    implementation("com.sendgrid:sendgrid-java:4.2.1")
 }
 
 tasks.withType<KotlinCompile> {

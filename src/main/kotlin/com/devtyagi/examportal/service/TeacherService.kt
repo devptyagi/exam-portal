@@ -121,10 +121,8 @@ class TeacherService(
             addTeacherRequestDTO.subjects
         )
         val savedTeacher = teacherRepository.save(teacher)
-        val response = savedTeacher.toAddTeacherResponseDTO()
-        return response
+        return savedTeacher.toAddTeacherResponseDTO()
     }
-
 
     fun loginTeacher(loginRequestDTO: LoginRequestDTO): LoginTeacherResponseDTO {
         try {

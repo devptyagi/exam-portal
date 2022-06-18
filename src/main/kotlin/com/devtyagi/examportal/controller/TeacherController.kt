@@ -5,10 +5,13 @@ import com.devtyagi.examportal.constants.Endpoints
 import com.devtyagi.examportal.dao.Exam
 import com.devtyagi.examportal.dto.request.AddExamRequestDTO
 import com.devtyagi.examportal.dto.request.AddQuestionRequestDTO
+import com.devtyagi.examportal.dto.request.AddStudentRequestDTO
 import com.devtyagi.examportal.dto.request.LoginRequestDTO
 import com.devtyagi.examportal.dto.response.AddExamResponseDTO
 import com.devtyagi.examportal.dto.response.AddQuestionResponseDTO
+import com.devtyagi.examportal.dto.response.AddStudentResponseDTO
 import com.devtyagi.examportal.dto.response.LoginTeacherResponseDTO
+import com.devtyagi.examportal.service.StudentService
 import com.devtyagi.examportal.service.TeacherService
 import io.jsonwebtoken.Jwts.header
 import org.springframework.http.HttpHeaders
@@ -30,8 +33,14 @@ import java.util.*
 @RestController
 @RequestMapping(Endpoints.BASE_URL)
 class TeacherController(
-    private val teacherService: TeacherService
+    private val teacherService: TeacherService,
+    private val studentService: StudentService
 ) {
+
+    @PostMapping(Endpoints.TeacherAPI.ADD_STUDENT)
+    fun addStudent(@RequestBody addStudentRequestDTO: AddStudentRequestDTO) : AddStudentResponseDTO {
+        return studentService.addStudent(addStudentRequestDTO)
+    }
 
     @GetMapping(Endpoints.TeacherAPI.GET_ALL_EXAMS)
     fun getAllExamsByTeacher(): List<Exam> {
