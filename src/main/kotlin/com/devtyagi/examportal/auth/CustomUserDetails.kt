@@ -4,7 +4,6 @@ import com.devtyagi.examportal.dao.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import java.util.List
 
 class CustomUserDetails(
     private val user: User,
@@ -13,6 +12,14 @@ class CustomUserDetails(
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         val simpleGrantedAuthority = SimpleGrantedAuthority("ROLE_" + user.role.toString())
         return mutableListOf(simpleGrantedAuthority)
+    }
+
+    fun getName(): String {
+        return user.name
+    }
+
+    fun getUserId(): String? {
+        return user.userId
     }
 
     override fun getPassword(): String {
