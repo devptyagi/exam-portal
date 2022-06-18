@@ -1,14 +1,19 @@
 package com.devtyagi.examportal.service
 
+import com.devtyagi.examportal.auth.CustomUserDetails
 import com.devtyagi.examportal.auth.JwtUserDetailsService
 import com.devtyagi.examportal.auth.JwtUtil
 import com.devtyagi.examportal.dao.Exam
 import com.devtyagi.examportal.dao.Student
 import com.devtyagi.examportal.dao.User
 import com.devtyagi.examportal.dto.request.AddStudentRequestDTO
+import com.devtyagi.examportal.dto.request.LoginRequestDTO
 import com.devtyagi.examportal.dto.response.AddStudentResponseDTO
+import com.devtyagi.examportal.dto.response.LoginStudentResponseDTO
+import com.devtyagi.examportal.dto.response.LoginTeacherResponseDTO
 import com.devtyagi.examportal.enums.Gender
 import com.devtyagi.examportal.enums.Role
+import com.devtyagi.examportal.exception.InvalidCredentialsException
 import com.devtyagi.examportal.exception.StudentNotFoundException
 import com.devtyagi.examportal.repository.ExamRepository
 import com.devtyagi.examportal.repository.StudentRepository
@@ -16,6 +21,8 @@ import com.devtyagi.examportal.repository.SubjectRepository
 import com.devtyagi.examportal.util.EmailUtil
 import com.devtyagi.examportal.util.RandomPasswordUtil
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -50,7 +57,7 @@ class StudentService(
             addStudentRequestDTO.email,
             gender!!,
             Role.TEACHER,
-            password,
+            passwordEncoder.encode(password),
             addStudentRequestDTO.phoneNumber
         )
         val student = Student(
@@ -64,6 +71,28 @@ class StudentService(
 
     fun getStudentById(user: User): Student {
         return studentRepository.findStudentByUser(user) ?: throw StudentNotFoundException()
+    }
+
+    fun loginStudent(loginRequestDTO: LoginRequestDTO): LoginStudentResponseDTO {
+        try {
+            authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                    loginRequestDTO.email,
+                    loginRequestDTO.password
+                )
+            )
+        } catch (exception: BadCredentialsException) {
+            throw InvalidCredentialsException()
+        }
+        val userDetails = userDetailsService.loadUserByUsername(loginRequestDTO.email) as CustomUserDetails
+        val accessToken = jwtUtil.generateToken(userDetails)
+        return LoginStudentResponseDTO(
+            userDetails.getUser().name,
+            userDetails.getUser().email,
+            userDetails.getUser().gender.toString(),
+            userDetails.getUser().phoneNumber,
+            accessToken
+        )
     }
 
 }

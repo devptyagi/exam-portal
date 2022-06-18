@@ -23,6 +23,8 @@ class Endpoints {
         companion object {
             private const val STUDENT_BASE_URL = "/student"
 
+            const val LOGIN = "${STUDENT_BASE_URL}/login"
+
             const val GET_AVAILABLE_EXAMS = "${STUDENT_BASE_URL}/get-all-exams"
         }
     }
