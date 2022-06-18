@@ -14,6 +14,10 @@ class CustomUserDetails(
         return mutableListOf(simpleGrantedAuthority)
     }
 
+    fun getUser(): User {
+        return user
+    }
+
     fun getName(): String {
         return user.name
     }
