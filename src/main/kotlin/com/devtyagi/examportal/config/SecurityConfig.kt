@@ -42,11 +42,6 @@ class SecurityConfig(
     }
 
     @Bean
-    fun passwordEncoder(): BCryptPasswordEncoder? {
-        return BCryptPasswordEncoder()
-    }
-
-    @Bean
     override fun authenticationManagerBean(): AuthenticationManager {
         return super.authenticationManagerBean()
     }
