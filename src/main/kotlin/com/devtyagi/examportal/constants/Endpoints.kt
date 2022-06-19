@@ -26,6 +26,8 @@ class Endpoints {
             const val LOGIN = "${STUDENT_BASE_URL}/login"
 
             const val GET_AVAILABLE_EXAMS = "${STUDENT_BASE_URL}/get-all-exams"
+
+            const val SUBMIT_EXAM = "${STUDENT_BASE_URL}/submit-exam"
         }
     }
 

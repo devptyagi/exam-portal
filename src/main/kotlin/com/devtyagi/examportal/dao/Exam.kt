@@ -38,7 +38,7 @@ class Exam(
 
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @JoinColumn(name = "exam_id", referencedColumnName = "examId")
-    val questions: List<Question>,
+    val questions: Set<Question>,
 
     @Id
     @GeneratedValue(generator = "system-uuid")

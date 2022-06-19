@@ -23,6 +23,13 @@ class ExamSubmission(
     @JoinColumn(name = "exam_submission_id", referencedColumnName = "examSubmissionId")
     val responses: List<QuestionResponse>,
 
+    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @JoinColumn(
+        name = "student_id",
+        referencedColumnName = "studentId"
+    )
+    val student: Student,
+
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")

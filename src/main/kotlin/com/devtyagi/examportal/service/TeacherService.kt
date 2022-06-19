@@ -50,7 +50,7 @@ class TeacherService(
     private val log = LoggerFactory.getLogger(this.javaClass)
 
     fun createExam(addExamRequestDTO: AddExamRequestDTO): AddExamResponseDTO  {
-        val questions = mutableListOf<Question>()
+        val questions = mutableSetOf<Question>()
         var totalMarks = 0
         for(questionId in addExamRequestDTO.questions) {
             val question = questionRepository.findById(questionId).orElse(null) ?: throw QuestionDoesNotExistException()

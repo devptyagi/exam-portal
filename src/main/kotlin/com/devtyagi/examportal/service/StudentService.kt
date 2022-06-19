@@ -3,25 +3,18 @@ package com.devtyagi.examportal.service
 import com.devtyagi.examportal.auth.CustomUserDetails
 import com.devtyagi.examportal.auth.JwtUserDetailsService
 import com.devtyagi.examportal.auth.JwtUtil
-import com.devtyagi.examportal.dao.Exam
-import com.devtyagi.examportal.dao.ExamSubmission
-import com.devtyagi.examportal.dao.Student
-import com.devtyagi.examportal.dao.User
+import com.devtyagi.examportal.dao.*
 import com.devtyagi.examportal.dto.request.AddStudentRequestDTO
 import com.devtyagi.examportal.dto.request.ExamSubmissionRequestDTO
 import com.devtyagi.examportal.dto.request.LoginRequestDTO
 import com.devtyagi.examportal.dto.response.AddStudentResponseDTO
 import com.devtyagi.examportal.dto.response.ExamSubmissionResponseDTO
 import com.devtyagi.examportal.dto.response.LoginStudentResponseDTO
-import com.devtyagi.examportal.dto.response.LoginTeacherResponseDTO
 import com.devtyagi.examportal.enums.Gender
 import com.devtyagi.examportal.enums.Role
 import com.devtyagi.examportal.exception.InvalidCredentialsException
 import com.devtyagi.examportal.exception.StudentNotFoundException
-import com.devtyagi.examportal.repository.ExamRepository
-import com.devtyagi.examportal.repository.ExamSubmissionRepository
-import com.devtyagi.examportal.repository.StudentRepository
-import com.devtyagi.examportal.repository.SubjectRepository
+import com.devtyagi.examportal.repository.*
 import com.devtyagi.examportal.util.EmailUtil
 import com.devtyagi.examportal.util.RandomPasswordUtil
 import org.springframework.security.authentication.AuthenticationManager
@@ -30,7 +23,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.Instant
-import java.util.*
 
 @Service
 class StudentService(
@@ -40,26 +32,37 @@ class StudentService(
     private val authenticationManager: AuthenticationManager,
     private val userDetailsService: JwtUserDetailsService,
     private val subjectRepository: SubjectRepository,
+    private val examResultRepository: ExamResultRepository,
     private val examSubmissionRepository: ExamSubmissionRepository,
+    private val questionRepository: QuestionRepository,
     private val examRepository: ExamRepository,
     private val jwtUtil: JwtUtil
 ) {
 
-    fun submitExamResponse(examSubmissionRequestDTO: ExamSubmissionRequestDTO) : ExamSubmissionResponseDTO {
+    fun submitExamResponse(examSubmissionRequestDTO: ExamSubmissionRequestDTO, student: Student) : ExamSubmissionResponseDTO {
         val exam = examRepository.findById(examSubmissionRequestDTO.examId).get()
         val examSubmission = ExamSubmission(
             exam,
-            examSubmissionRequestDTO.responses
+            examSubmissionRequestDTO.responses,
+            student
         )
         val savedSubmission = examSubmissionRepository.save(examSubmission)
         var marksObtained = 0
         val maximumMarks = exam.maximumMarks
         for(questionResponse in savedSubmission.responses) {
-            if(questionResponse.question.answer == questionResponse.selectedOption) {
-                marksObtained += questionResponse.question.marks
+            val question = questionRepository.findById(questionResponse.questionId).get()
+            if(question.answer == questionResponse.selectedOption) {
+                marksObtained += question.marks
             }
         }
         val percentage = (marksObtained.toDouble() / maximumMarks.toDouble()) * 100
+        val examResult = ExamResult(
+            exam,
+            marksObtained,
+            percentage,
+            student
+        )
+        examResultRepository.save(examResult)
         return ExamSubmissionResponseDTO(
             marksObtained,
             maximumMarks,
@@ -83,7 +86,7 @@ class StudentService(
             addStudentRequestDTO.name,
             addStudentRequestDTO.email,
             gender!!,
-            Role.TEACHER,
+            Role.STUDENT,
             passwordEncoder.encode(password),
             addStudentRequestDTO.phoneNumber
         )
@@ -96,7 +99,7 @@ class StudentService(
         return savedStudent.toAddStudentResponseDTO()
     }
 
-    fun getStudentById(user: User): Student {
+    fun getStudentByUser(user: User): Student {
         return studentRepository.findStudentByUser(user) ?: throw StudentNotFoundException()
     }
 

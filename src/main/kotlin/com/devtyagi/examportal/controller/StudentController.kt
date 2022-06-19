@@ -3,7 +3,9 @@ package com.devtyagi.examportal.controller
 import com.devtyagi.examportal.auth.CustomUserDetails
 import com.devtyagi.examportal.constants.Endpoints
 import com.devtyagi.examportal.dao.Exam
+import com.devtyagi.examportal.dto.request.ExamSubmissionRequestDTO
 import com.devtyagi.examportal.dto.request.LoginRequestDTO
+import com.devtyagi.examportal.dto.response.ExamSubmissionResponseDTO
 import com.devtyagi.examportal.dto.response.LoginStudentResponseDTO
 import com.devtyagi.examportal.service.StudentService
 import org.springframework.security.core.context.SecurityContextHolder
@@ -19,6 +21,13 @@ class StudentController(
     private val studentService: StudentService
 ) {
 
+    @PostMapping(Endpoints.StudentAPI.SUBMIT_EXAM)
+    fun submitExam(@RequestBody examSubmissionRequestDTO: ExamSubmissionRequestDTO) : ExamSubmissionResponseDTO {
+        val user = SecurityContextHolder.getContext().authentication.principal as CustomUserDetails
+        val student = studentService.getStudentByUser(user.getUser())
+        return studentService.submitExamResponse(examSubmissionRequestDTO, student)
+    }
+
     @PostMapping(Endpoints.StudentAPI.LOGIN)
     fun loginStudent(@RequestBody loginRequestDTO: LoginRequestDTO) : LoginStudentResponseDTO {
         return studentService.loginStudent(loginRequestDTO)
@@ -27,7 +36,7 @@ class StudentController(
     @GetMapping(Endpoints.StudentAPI.GET_AVAILABLE_EXAMS)
     fun getAllAvailableExams(): List<Exam> {
         val user = SecurityContextHolder.getContext().authentication.principal as CustomUserDetails
-        val student = studentService.getStudentById(user.getUser())
+        val student = studentService.getStudentByUser(user.getUser())
         return studentService.getAvailableExams(student)
     }
 

@@ -13,12 +13,7 @@ import javax.persistence.*
 @AllArgsConstructor
 @Data
 class QuestionResponse(
-    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @JoinColumn(
-        name = "question_id",
-        referencedColumnName = "questionId"
-    )
-    val question: Question,
+    val questionId: String,
     val selectedOption: Answer,
     @Id
     @GeneratedValue(generator = "system-uuid")
