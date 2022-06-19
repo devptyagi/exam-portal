@@ -16,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.authentication.logout.LogoutFilter
+import org.springframework.web.cors.CorsUtils
 
 @Configuration
 @EnableWebSecurity
@@ -35,6 +36,7 @@ class SecurityConfig(
         http?.csrf()?.disable()
         http?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         http?.authorizeRequests()
+                ?.requestMatchers(CorsUtils::isPreFlightRequest)?.permitAll()
             ?.antMatchers(Endpoints.BASE_URL + "/**/login")?.permitAll()
             ?.antMatchers(Endpoints.BASE_URL + "/admin/**")?.hasRole(Role.ADMIN.toString())
             ?.antMatchers(Endpoints.BASE_URL + "/teacher/**")?.hasRole(Role.TEACHER.toString())

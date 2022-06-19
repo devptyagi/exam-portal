@@ -17,8 +17,9 @@ class CordConfig {
         return object : WebMvcConfigurer {
             override fun addCorsMappings(registry: CorsRegistry) {
                 registry.addMapping("/**")
-                    .allowedMethods("GET", "POST", "PUT", "DELETE")
+                    .allowedMethods("*")
                     .allowedOrigins("*")
+
             }
         }
     }
