@@ -86,6 +86,7 @@ class TeacherService(
             savedQuestion.optionThree,
             savedQuestion.optionFour,
             savedQuestion.answer.toString(),
+            savedQuestion.marks,
             savedQuestion.questionId!!
         )
     }

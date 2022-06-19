@@ -14,5 +14,6 @@ data class AddQuestionResponseDTO(
     val optionThree: String,
     val optionFour: String,
     val answer: String,
+    val marks: Int,
     val questionId: String
 )
