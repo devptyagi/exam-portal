@@ -12,6 +12,7 @@ import com.devtyagi.examportal.dto.response.ExamSubmissionResponseDTO
 import com.devtyagi.examportal.dto.response.LoginStudentResponseDTO
 import com.devtyagi.examportal.enums.Gender
 import com.devtyagi.examportal.enums.Role
+import com.devtyagi.examportal.exception.ExamNotFoundException
 import com.devtyagi.examportal.exception.InvalidCredentialsException
 import com.devtyagi.examportal.exception.StudentNotFoundException
 import com.devtyagi.examportal.repository.*
@@ -68,6 +69,10 @@ class StudentService(
             maximumMarks,
             percentage
         )
+    }
+
+    fun getExamById(examId: String) : Exam {
+        return examRepository.findById(examId).orElse(null) ?: throw ExamNotFoundException()
     }
 
     fun getAvailableExams(student: Student): List<Exam> {

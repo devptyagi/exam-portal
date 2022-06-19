@@ -30,6 +30,8 @@ class Endpoints {
             const val GET_AVAILABLE_EXAMS = "${STUDENT_BASE_URL}/get-all-exams"
 
             const val SUBMIT_EXAM = "${STUDENT_BASE_URL}/submit-exam"
+
+            const val GET_EXAM_BY_ID = "${STUDENT_BASE_URL}/exam/{examId}"
         }
     }
 
