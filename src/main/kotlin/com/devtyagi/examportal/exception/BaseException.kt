@@ -4,5 +4,5 @@ import org.springframework.http.HttpStatus
 
 open class BaseException(
     message: String?,
-    responseHttpStatus: HttpStatus?
+    val responseHttpStatus: HttpStatus?
 ) : RuntimeException(message)

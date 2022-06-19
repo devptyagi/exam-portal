@@ -11,10 +11,7 @@ import com.devtyagi.examportal.dto.request.AddExamRequestDTO
 import com.devtyagi.examportal.dto.request.AddQuestionRequestDTO
 import com.devtyagi.examportal.dto.request.AddTeacherRequestDTO
 import com.devtyagi.examportal.dto.request.LoginRequestDTO
-import com.devtyagi.examportal.dto.response.AddExamResponseDTO
-import com.devtyagi.examportal.dto.response.AddQuestionResponseDTO
-import com.devtyagi.examportal.dto.response.AddTeacherResponseDTO
-import com.devtyagi.examportal.dto.response.LoginTeacherResponseDTO
+import com.devtyagi.examportal.dto.response.*
 import com.devtyagi.examportal.enums.Answer
 import com.devtyagi.examportal.enums.Gender
 import com.devtyagi.examportal.enums.Role
@@ -22,10 +19,7 @@ import com.devtyagi.examportal.exception.InvalidCredentialsException
 import com.devtyagi.examportal.exception.QuestionDoesNotExistException
 import com.devtyagi.examportal.exception.SubjectNotFoundException
 import com.devtyagi.examportal.exception.TeacherNotFoundException
-import com.devtyagi.examportal.repository.ExamRepository
-import com.devtyagi.examportal.repository.QuestionRepository
-import com.devtyagi.examportal.repository.SubjectRepository
-import com.devtyagi.examportal.repository.TeacherRepository
+import com.devtyagi.examportal.repository.*
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
@@ -44,6 +38,7 @@ class TeacherService(
     private val questionRepository: QuestionRepository,
     private val subjectRepository: SubjectRepository,
     private val examRepository: ExamRepository,
+    private val examResultRepository: ExamResultRepository,
     private val jwtUtil: JwtUtil,
 ) {
 
@@ -153,6 +148,29 @@ class TeacherService(
 
     fun getAllExamsByTeacher(user: User): List<Exam> {
         return examRepository.findAllByCreatedBy_User(user)
+    }
+
+    fun getExamStatistics(examId: String): ExamStatisticsResponseDTO {
+        val exam = examRepository.findById(examId).get()
+        val examResults = examResultRepository.findAllByExam_ExamId(examId)
+        var minimumMarksObtained = Int.MAX_VALUE
+        var maximumMarksObtained = 0
+        var totalCount = 0
+        var totalMarksObtained = 0
+        for(examResult in examResults) {
+            minimumMarksObtained = Math.min(minimumMarksObtained, examResult.marksObtained)
+            maximumMarksObtained = Math.max(maximumMarksObtained, examResult.marksObtained)
+            totalMarksObtained += examResult.marksObtained
+            totalCount++
+        }
+        val averageMarks = totalMarksObtained.toDouble() / totalCount.toDouble()
+        return ExamStatisticsResponseDTO(
+            exam,
+            averageMarks,
+            minimumMarksObtained,
+            maximumMarksObtained,
+            examResults
+        )
     }
 
 }

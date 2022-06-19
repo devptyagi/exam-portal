@@ -7,10 +7,7 @@ import com.devtyagi.examportal.dto.request.AddExamRequestDTO
 import com.devtyagi.examportal.dto.request.AddQuestionRequestDTO
 import com.devtyagi.examportal.dto.request.AddStudentRequestDTO
 import com.devtyagi.examportal.dto.request.LoginRequestDTO
-import com.devtyagi.examportal.dto.response.AddExamResponseDTO
-import com.devtyagi.examportal.dto.response.AddQuestionResponseDTO
-import com.devtyagi.examportal.dto.response.AddStudentResponseDTO
-import com.devtyagi.examportal.dto.response.LoginTeacherResponseDTO
+import com.devtyagi.examportal.dto.response.*
 import com.devtyagi.examportal.service.StudentService
 import com.devtyagi.examportal.service.TeacherService
 import io.jsonwebtoken.Jwts.header
@@ -36,6 +33,11 @@ class TeacherController(
     private val teacherService: TeacherService,
     private val studentService: StudentService
 ) {
+
+    @GetMapping(Endpoints.TeacherAPI.GET_STATS_FOR_EXAM)
+    fun checkExamStatistics(@PathVariable("examId") examId: String): ExamStatisticsResponseDTO {
+        return teacherService.getExamStatistics(examId)
+    }
 
     @PostMapping(Endpoints.TeacherAPI.ADD_STUDENT)
     fun addStudent(@RequestBody addStudentRequestDTO: AddStudentRequestDTO) : AddStudentResponseDTO {
