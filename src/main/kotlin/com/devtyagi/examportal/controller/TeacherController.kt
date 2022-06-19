@@ -39,11 +39,6 @@ class TeacherController(
         return teacherService.getExamStatistics(examId)
     }
 
-    @PostMapping(Endpoints.TeacherAPI.ADD_STUDENT)
-    fun addStudent(@RequestBody addStudentRequestDTO: AddStudentRequestDTO) : AddStudentResponseDTO {
-        return studentService.addStudent(addStudentRequestDTO)
-    }
-
     @GetMapping(Endpoints.TeacherAPI.GET_ALL_EXAMS)
     fun getAllExamsByTeacher(): List<Exam> {
         val user = SecurityContextHolder.getContext().authentication.principal as CustomUserDetails

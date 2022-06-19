@@ -16,6 +16,8 @@ class Endpoints {
             const val ADD_SUBJECT = "${ADMIN_BASE_URL}/add-subject"
 
             const val GET_ALL_SUBJECTS = "${ADMIN_BASE_URL}/get-subjects"
+
+            const val ADD_STUDENT = "${ADMIN_BASE_URL}/add-student"
         }
     }
 
@@ -42,8 +44,6 @@ class Endpoints {
             const val GET_IMAGE = "${TEACHER_BASE_URL}/{questionId}/get-image"
 
             const val ADD_QUESTION = "${TEACHER_BASE_URL}/add-question"
-
-            const val ADD_STUDENT = "${TEACHER_BASE_URL}/add-student"
 
             const val CREATE_EXAM = "${TEACHER_BASE_URL}/add-exam"
 
