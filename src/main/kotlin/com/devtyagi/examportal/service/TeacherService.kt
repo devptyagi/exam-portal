@@ -44,7 +44,7 @@ class TeacherService(
 
     private val log = LoggerFactory.getLogger(this.javaClass)
 
-    fun createExam(addExamRequestDTO: AddExamRequestDTO): AddExamResponseDTO  {
+    fun createExam(addExamRequestDTO: AddExamRequestDTO, teacher: Teacher): AddExamResponseDTO  {
         val questions = mutableSetOf<Question>()
         var totalMarks = 0
         for(questionId in addExamRequestDTO.questions) {
@@ -52,7 +52,6 @@ class TeacherService(
             questions.add(question)
             totalMarks += question.marks
         }
-        val teacher = teacherRepository.findById(addExamRequestDTO.createdBy).orElse(null) ?: throw TeacherNotFoundException()
         val subject = subjectRepository.findById(addExamRequestDTO.subject).orElse(null) ?: throw SubjectNotFoundException()
         val exam = Exam(
             addExamRequestDTO.title,

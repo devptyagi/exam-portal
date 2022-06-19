@@ -52,7 +52,9 @@ class TeacherController(
 
     @PostMapping(Endpoints.TeacherAPI.CREATE_EXAM)
     fun createExam(@RequestBody addExamRequestDTO: AddExamRequestDTO): AddExamResponseDTO {
-        return teacherService.createExam(addExamRequestDTO)
+        val user = SecurityContextHolder.getContext().authentication.principal as CustomUserDetails
+        val teacher = teacherService.getTeacherById(user.getUserId()!!)
+        return teacherService.createExam(addExamRequestDTO, teacher)
     }
 
     @PostMapping(Endpoints.TeacherAPI.ADD_QUESTION)
